@@ -5,6 +5,8 @@ class Artist(models.Model):
     # artistid = models.AutoField(db_column='ArtistId', primary_key=True)  # Field name made lowercase.
     name = models.CharField(max_length=200)  # Field name made lowercase. This field type is a guess.
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 

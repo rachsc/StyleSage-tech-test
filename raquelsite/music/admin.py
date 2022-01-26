@@ -5,27 +5,27 @@ from .models import Artist, Album, Composer, MediaType, Genre, Track
 
 
 class ArtistAdmin(admin.ModelAdmin):
-    list_display = '__all__'
+    list_display = ["name"]
 
 
 class AlbumAdmin(admin.ModelAdmin):
-    list_display = '__all__'
+    list_display = ["title", "artist"]
 
 
 class ComposerAdmin(admin.ModelAdmin):
-    list_display = '__all__'
+    list_display = ["composer"]
 
 
 class MediaTypeAdmin(admin.ModelAdmin):
-    list_display = '__all__'
+    list_display = ["name"]
 
 
 class GenreAdmin(admin.ModelAdmin):
-    list_display = '__all__'
+    list_display = ["name"]
 
 
 class TrackAdmin(admin.ModelAdmin):
-    list_display = '__all__'
+    list_display = ["title", "album", "media_type", "genre", "composer_name", "milliseconds", "byte_s"]
 
 
 admin.site.register(Artist, ArtistAdmin)
