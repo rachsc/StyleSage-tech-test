@@ -1,0 +1,17 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Music</title>
+    <link rel="stylesheet" href="{% static 'css/music.css' %}">
+</head>
+<body>
+    <h1>Music data</h1>
+    <nav>
+        <a href="/artists">Artists</a>
+        <a href="/albums">Albums</a>
+    </nav>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

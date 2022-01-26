@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ album.title }} <a href=""></a></h2>
+
+<h3>Songs <a href=""></a></h3>
+<ul>
+    {% for track in album.track_set.all %}
+        <li>
+            <a href="">{{ track.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

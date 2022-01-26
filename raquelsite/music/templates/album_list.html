@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Albums <a href=""></a></h2>
+    <ul>
+        {% for album in albums %}
+            <li>
+                <a href="{% url 'album_detail' pk=album.pk %}">{{ album.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
