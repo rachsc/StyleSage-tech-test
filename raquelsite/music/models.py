@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Artist(models.Model):
@@ -7,9 +8,8 @@ class Artist(models.Model):
 
     objects = models.Manager()
 
-    @property
-    def albums(self):
-        return self.album_set.all()
+    def get_absolute_url(self):
+        return reverse('artist_detail', kwargs={'pk': self.artist_id})
 
     def __str__(self):
         return self.name
@@ -30,9 +30,12 @@ class Album(models.Model):
     title = models.TextField(db_column='Title')
     album_id = models.AutoField(db_column='AlbumId', primary_key=True)
     # artist = models.IntegerField(db_column='ArtistId')
-    artist = models.ForeignKey(Artist, models.DO_NOTHING)
+    artist = models.ForeignKey(Artist, models.DO_NOTHING, related_name='related_albums')
 
     objects = models.Manager()
+
+    def get_absolute_url(self):
+        return reverse('album_detail', kwargs={'pk': self.album_id})
 
     def __str__(self):
         return self.title
@@ -53,7 +56,7 @@ class Album(models.Model):
 class Track(models.Model):
     track_id = models.AutoField(db_column='TrackId', primary_key=True)
     name = models.TextField(db_column='Name')
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, default=0)
+    album = models.ForeignKey(Album, on_delete=models.CASCADE, default=0, related_name='related_tracks')
     # album = models.IntegerField(db_column='AlbumId', blank=True, null=True)
     # composer = models.TextField(db_column='Composer', blank=True, null=True)
     milliseconds = models.IntegerField(db_column='Milliseconds')

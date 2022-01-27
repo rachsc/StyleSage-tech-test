@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <h2>Albums <a href=""></a></h2>
-    <ul>
-        {% for album in albums %}
-            <li>
-                <a href="{% url 'album_detail' pk=album.pk %}">{{ album.title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+{% block body %}
+    <h2> Albums <a href=""></a></h2>
+    {% if albums %}
+        <ul>
+            {% for album in albums %}
+                <li><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3> There aren´t any albums </h3>
+    {% endif %}
 {% endblock %}

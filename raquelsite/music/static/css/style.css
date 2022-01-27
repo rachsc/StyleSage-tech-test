@@ -1,0 +1,11 @@
+body {
+    background: white url("../images/background.png")
+}
+
+.navbar {
+    border-radius: 0; /*so no curvy edges for header navigation bar*/
+}
+
+.navbar-brand {
+    font-family: 'Satisfy', cursive; /*make use of that google font, and use cursive as backup if user can't load that font*/
+}
