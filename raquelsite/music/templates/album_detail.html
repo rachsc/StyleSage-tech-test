@@ -4,16 +4,16 @@
 
 
     <h1>{{ album.title }}</h1>
-    <h2>{{ album.artist }}</h2>
 
     {% if error_message %}
         <p><strong>{{ error_message }}</strong></p>
     {% endif %}
 
-<!--    <h3>Songs <a href=""></a></h3>-->
-     <ul>
+    <h2>Songs:</h2>
+    <ul>
         {% for track in album.related_tracks.all %}
             <li>{{ track.name }}</li>
+            <p>Track duration: {{ track.milliseconds }}</p>
         {% endfor %}
      </ul>
 

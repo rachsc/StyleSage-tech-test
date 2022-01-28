@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # My Project App
-    'music.apps.MusicConfig'
+    'music'
 ]
 
 MIDDLEWARE = [

@@ -24,10 +24,20 @@
 # def album_detail(request, pk):
 #     album = Album.objects.get(album_id=pk)
 #     return render(request, 'album_detail.html', {'album': album})
+
+
 from django.views import generic
 from django.shortcuts import render
+from django.db.models import Count
 from django.urls import reverse_lazy
 from .models import Artist, Album
+
+
+def total_duration(queryset):
+    duration = 0
+    for track in queryset:
+        duration = duration + track.milliseconds
+    return duration
 
 
 def index(request):
@@ -53,11 +63,22 @@ class AlbumListView(generic.ListView):
     queryset = Album.objects.all()
     template_name = 'album_list.html'
 
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     data = super(AlbumListView, self).get_context_data(**kwargs)
+    #     data['album_artist'] = self.model.album_artist
+    #     data['album_duration'] = self.model.album_duration
+    #     return data
+
 
 class AlbumDetailView(generic.DetailView):
     model = Album
     context_object_name = 'album'
     template_name = 'album_detail.html'
+
+
+
+
+
 
 
 

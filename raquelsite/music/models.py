@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models import Count
 
 
 class Artist(models.Model):
@@ -43,6 +44,29 @@ class Album(models.Model):
     class Meta:
         db_table = 'albums'
         ordering = ('title',)
+
+    @property
+    def album_artist(self):
+        return self.artist
+
+    def tracks_count(self):
+        return self.related_tracks.count()
+
+    def album_duration(self):
+        duration_ms = 0
+        for ms in self.related_tracks.values_list('milliseconds', flat=True):
+            duration_ms = duration_ms + ms
+        duration_min = duration_ms/(1000*60)
+        duration_min_2decimals = float("{:.2f}".format(duration_min))
+        return duration_min_2decimals
+
+    def longest_track_duration(self):
+        longest_min = (max(self.related_tracks.values_list('milliseconds', flat=True)))/(1000*60)
+        return float("{:.2f}".format(longest_min))
+
+    def shortest_track_duration(self):
+        shortest_min = (min(self.related_tracks.values_list('milliseconds', flat=True))) / (1000 * 60)
+        return float("{:.2f}".format(shortest_min))
 
 
 # class MusicAlbum(models.Model):

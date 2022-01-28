@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <h2> Albums <a href=""></a></h2>
+    <h2> Albums </h2>
     {% if albums %}
         <ul>
             {% for album in albums %}
-                <li><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></li>
+                <h3><a href="{{ album.get_absolute_url }}">{{ album.title }}</a></h3>
+                <li>Artist: {{ album.artist }}</li>
+                <li>Number of tracks: {{ album.tracks_count }}</li>
+                <li>Album duration: {{ album.album_duration }} minutes</li>
+                <li>Longest track duration: {{ album.longest_track_duration }} minutes</li>
+                <li>Shortest track duration: {{ album.shortest_track_duration }} minutes</li>
             {% endfor %}
         </ul>
     {% else %}
