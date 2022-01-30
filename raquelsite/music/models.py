@@ -1,6 +1,5 @@
 from django.db import models
 from django.urls import reverse
-from django.db.models import Count
 
 
 class Artist(models.Model):
@@ -18,13 +17,6 @@ class Artist(models.Model):
     class Meta:
         db_table = 'artists'
         ordering = ('name',)
-
-
-# class MusicArtist(models.Model):
-#     name = models.CharField(max_length=200)
-#
-#     class Meta:
-#         db_table = 'music_artist'
 
 
 class Album(models.Model):
@@ -69,14 +61,6 @@ class Album(models.Model):
         return float("{:.2f}".format(shortest_min))
 
 
-# class MusicAlbum(models.Model):
-#     title = models.CharField(max_length=200)
-#     artist = models.ForeignKey('MusicArtist', models.DO_NOTHING)
-#
-#     class Meta:
-#         db_table = 'music_album'
-
-
 class Track(models.Model):
     track_id = models.AutoField(db_column='TrackId', primary_key=True)
     name = models.TextField(db_column='Name')
@@ -93,6 +77,16 @@ class Track(models.Model):
     class Meta:
         db_table = 'tracks'
         ordering = ('name',)
+
+
+class ArtistImage(models.Model):
+    image = models.ImageField(upload_to='images/')
+    name = models.ForeignKey(Artist, models.DO_NOTHING, related_name='related_images')
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.image
 
 
 # class MusicTrack(models.Model):

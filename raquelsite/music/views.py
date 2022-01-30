@@ -24,20 +24,65 @@
 # def album_detail(request, pk):
 #     album = Album.objects.get(album_id=pk)
 #     return render(request, 'album_detail.html', {'album': album})
+import csv
 
-
+from django.core.files.storage import FileSystemStorage
+from django.db import transaction
+from django.http import HttpResponse
+from django.utils import timezone
 from django.views import generic
-from django.shortcuts import render
-from django.db.models import Count
-from django.urls import reverse_lazy
-from .models import Artist, Album
+from django.shortcuts import render, redirect
+from rest_framework import generics
+
+from .models import Artist, Album, ArtistImage
+from .forms import ArtistImageForm
 
 
-def total_duration(queryset):
-    duration = 0
-    for track in queryset:
-        duration = duration + track.milliseconds
-    return duration
+def download_artists(request, queryset):
+    model = queryset.model
+    model_fields = model._meta.fields + model._meta.many_to_many
+    field_names = [field.name for field in model_fields]
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="artists.csv"'
+
+    # the csv writer
+    writer = csv.writer(response, delimiter=";")
+    # Write a first row with header information
+    writer.writerow(field_names)
+    # Write data rows
+    for row in queryset:
+        values = []
+        for field in field_names:
+            value = getattr(row, field)
+            if callable(value):
+                try:
+                    value = value() or ''
+                except:
+                    value = 'Error retrieving value'
+            if value is None:
+                value = ''
+            values.append(value)
+        writer.writerow(values)
+    return response
+
+
+def export_artists(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    data = download_artists(request, Artist.objects.all())
+    response = HttpResponse(data, content_type='text/csv')
+    return response
+
+
+def upload_images(request):
+    if request.method == "POST":
+        form = ArtistImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return redirect("upload")
+    form = ArtistImageForm()
+    images = ArtistImage.objects.all()
+    return render(request=request, template_name="upload.html", context={'form': form, 'images': images})
 
 
 def index(request):
@@ -74,12 +119,3 @@ class AlbumDetailView(generic.DetailView):
     model = Album
     context_object_name = 'album'
     template_name = 'album_detail.html'
-
-
-
-
-
-
-
-
-
