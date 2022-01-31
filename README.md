@@ -29,7 +29,7 @@ Endpoint | HTTP Method | CRUD Method | Result
 upload| POST | CREATE | Upload artists images to django database
 register | POST | CREATE | Create new user and lets you already logged in
 download-artists | GET | READ | Download csv file of the artists database
- | GET | READ | Home page
+/ | GET | READ | Home page
 artists | GET | READ | Get list of Artists
 artists/<str:ID> | GET | READ | Get one artist with a list of their albums
 albums | GET | READ | Get a list of all the albums with artist name, track count, total album duration, longest track duration and shortest track duration.
