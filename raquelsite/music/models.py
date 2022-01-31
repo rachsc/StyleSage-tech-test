@@ -21,6 +21,8 @@ class Artist(models.Model):
     @property
     def get_image(self):
         image_qs = self.related_images.values_list('image', flat=True)
+        if not image_qs[0]:
+            return None
         return image_qs[0]
 
 
