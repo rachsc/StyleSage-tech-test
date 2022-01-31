@@ -146,18 +146,3 @@ scrapy crawl image-search
 ```
 
 This will download an image for each artist if there is one in the page selected. They will be stored in the folder **images**.
-
-
-## TESTS
-You can find tests for models and views here.
-
-
-To run tests:
-```
-python manage.py test
-```
-
-To run tests with coverage:
-```
-coverage run --omit='*/venv/*' manage.py test
-```
