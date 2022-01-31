@@ -11,19 +11,26 @@
                     {% if error_message %}
                         <p><strong>{{ error_message }}</strong></p>
                     {% endif %}
-                    <form class="form-horizontal" role="form" method="post"></form>
-                    {% csrf_token %}
-                    {% include 'form-template.html' %}
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-success">Register</button>
-                        </div>
-                    </div>
+                    <form class="form-horizontal" role="form" method="post">
+                      {% csrf_token %}
+                      {% include 'form-template.html' %}
+                      <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                              <button type="submit" class="btn btn-success">Register</button>
+                          </div>
+                      </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!--  <h2>Sign up</h2>-->
+<!--  <form method="post">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_p }}-->
+<!--    <button type="submit">Sign up</button>-->
+<!--  </form>-->
 
 
 {% endblock %}

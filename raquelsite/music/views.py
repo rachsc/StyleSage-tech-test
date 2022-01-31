@@ -25,13 +25,17 @@
 #     album = Album.objects.get(album_id=pk)
 #     return render(request, 'album_detail.html', {'album': album})
 import csv
+
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.utils.decorators import method_decorator
 from django.views import generic
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 
 from .models import Artist, Album, ArtistImage
-from .forms import ArtistImageForm, UserForm
+from .forms import ArtistImageForm
 
 
 def download_artists(request, queryset):
@@ -112,7 +116,7 @@ class AlbumDetailView(generic.DetailView):
 
 
 class UserFormView(generic.View):
-    form_class = UserForm
+    form_class = UserCreationForm
     template_name = 'registration_form.html'
 
     # Show blank form
@@ -125,20 +129,34 @@ class UserFormView(generic.View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            form.save()  # Creates an object from the form but does not save it to the database yet
+            user = form.save(commit=False)  # Creates an object from the form but does not save it to the database yet
 
-            # # cleaned (normalized) data
-            # username = form.cleaned_data['username']
-            # password = form.cleaned_data['password']
-            # user.set_password(password)  # This is the way to change the default password
-            # user.save()
-            #
-            # # returns User objects if credentials are correct
-            # user = authenticate(username=username, password=password)  # check if it exist in the database
-            #
-            # if user is not None:
-            #     if user.is_active:  # User is not banned or something
-            #         login(request, user)
-            return redirect('index')
+            # cleaned (normalized) data
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user.set_password(password)  # This is the way to change the default password
+            user.save()
+
+            # returns User objects if credentials are correct
+            user = authenticate(username=username, password=password)  # check if it exist in the database
+
+            if user is not None:
+                if user.is_active:  # User is not banned or something
+                    login(request, user)
+                    return redirect('index')
 
         return render(request, self.template_name, {'form': form})
+
+# def signup(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             raw_password = form.cleaned_data.get('password1')
+#             user = authenticate(username=username, password=raw_password)
+#             login(request, user)
+#             return redirect('index')
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'registration_form.html', {'form': form})

@@ -60,7 +60,12 @@
                       </a>
                   </li>
                   <li class="">
-                      <a href="">
+                      <a href="{% url 'login' %}">
+                          <span class="glyphicon glyphicon-log-in" aria-hidden = 'true'></span>&nbsp; Login
+                      </a>
+                  </li>
+                  <li class="">
+                      <a href="{% url 'logout' %}?next={% url 'index' %}"">
                           <span class="glyphicon glyphicon-off" aria-hidden = 'true'></span>&nbsp; Logout
                       </a>
                   </li>
@@ -72,6 +77,23 @@
       </div>
   </nav>
     {% block body %}
+  <h1 class="text-center"><strong>Welcome to RaquelSite!</strong></h1>
+  {% if user.is_authenticated %}
+    <h3 class="text-center">Now you can see albums, their songs and much more!</h3>
+  {% else %}
+     <h3 class="text-center">
+            If you want to see more than just the list of artists, please
+            <a href="{% url 'register' %}">
+                <strong>Register</strong>
+            </a>
+            to create a new account or just
+            <a href="{% url 'login' %}">
+                <strong>Login</strong>
+            </a>
+            if you already have one.
+        </h3>
+  {% endif %}
+
     {% endblock %}
 </body>
 </html>

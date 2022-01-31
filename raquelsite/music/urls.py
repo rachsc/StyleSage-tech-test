@@ -11,4 +11,5 @@ urlpatterns = [
     path('albums/<int:pk>', views.AlbumDetailView.as_view(), name='album_detail'),
     path('download-artists/', views.export_artists, name='download-artists'),
     path('upload/', views.upload_images, name='upload'),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
