@@ -56,7 +56,7 @@ The home page will be in https://127.0.0.1:8000. From here, we can access the ac
 1. Click on **Artists** or go to https://127.0.0.1:8000/artists to see the list of artists. Authentication is NOT required.
    
 
-2. Now you can click on any artist of the list. You will be redirected to http://127.0.0.1:8000/artists/<id:pk> where you can see the albums of the artist and an image of the artist if you uploaded one to the database (this will be explained later in this document).
+2. Now you can click on any artist of the list. You will be redirected to http://127.0.0.1:8000/artists/<id:pk> where you can see the albums of the artist and an image of the artist if you uploaded one to the database (this is explained in the repository for Exercise 3: https://github.com/rachsc/StyleSage-tech-tes-Exercise3).
    Authentication it IS required.
    
 
@@ -146,3 +146,4 @@ scrapy crawl image-search
 ```
 
 This will download an image for each artist if there is one in the page selected. They will be stored in the folder **images**.
+
