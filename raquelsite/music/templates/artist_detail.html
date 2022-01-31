@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
-<h2>{{ artist.name }} <a href=""></a></h2>
+<img src="/media/{{ artist.get_image }}">
+<h2><strong>{{ artist.name }} </strong></h2>
 
 {% if error_message %}
     <p><strong>{{ error_message }}</strong></p>
 {% endif %}
 
-<h3>Albums <a href=""></a></h3>
+<h3>Albums </h3>
 <ul>
     {% for album in artist.related_albums.all %}
         <li>

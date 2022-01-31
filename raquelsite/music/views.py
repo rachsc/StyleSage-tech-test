@@ -25,17 +25,13 @@
 #     album = Album.objects.get(album_id=pk)
 #     return render(request, 'album_detail.html', {'album': album})
 import csv
-
-from django.core.files.storage import FileSystemStorage
-from django.db import transaction
 from django.http import HttpResponse
-from django.utils import timezone
 from django.views import generic
 from django.shortcuts import render, redirect
-from rest_framework import generics
+from django.contrib.auth import authenticate, login
 
 from .models import Artist, Album, ArtistImage
-from .forms import ArtistImageForm
+from .forms import ArtistImageForm, UserForm
 
 
 def download_artists(request, queryset):
@@ -89,7 +85,7 @@ def index(request):
     return render(request, 'base.html')
 
 
-class ArtisListView(generic.ListView):
+class ArtistListView(generic.ListView):
     model = Artist
     context_object_name = 'artists'
     queryset = Artist.objects.all()
@@ -108,14 +104,41 @@ class AlbumListView(generic.ListView):
     queryset = Album.objects.all()
     template_name = 'album_list.html'
 
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     data = super(AlbumListView, self).get_context_data(**kwargs)
-    #     data['album_artist'] = self.model.album_artist
-    #     data['album_duration'] = self.model.album_duration
-    #     return data
-
 
 class AlbumDetailView(generic.DetailView):
     model = Album
     context_object_name = 'album'
     template_name = 'album_detail.html'
+
+
+class UserFormView(generic.View):
+    form_class = UserForm
+    template_name = 'registration_form.html'
+
+    # Show blank form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    # Submit user registration
+    def post(self, request):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()  # Creates an object from the form but does not save it to the database yet
+
+            # # cleaned (normalized) data
+            # username = form.cleaned_data['username']
+            # password = form.cleaned_data['password']
+            # user.set_password(password)  # This is the way to change the default password
+            # user.save()
+            #
+            # # returns User objects if credentials are correct
+            # user = authenticate(username=username, password=password)  # check if it exist in the database
+            #
+            # if user is not None:
+            #     if user.is_active:  # User is not banned or something
+            #         login(request, user)
+            return redirect('index')
+
+        return render(request, self.template_name, {'form': form})

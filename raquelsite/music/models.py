@@ -18,6 +18,11 @@ class Artist(models.Model):
         db_table = 'artists'
         ordering = ('name',)
 
+    @property
+    def get_image(self):
+        image_qs = self.related_images.values_list('image', flat=True)
+        return image_qs[0]
+
 
 class Album(models.Model):
     title = models.TextField(db_column='Title')
