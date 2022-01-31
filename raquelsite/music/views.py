@@ -25,17 +25,14 @@
 #     album = Album.objects.get(album_id=pk)
 #     return render(request, 'album_detail.html', {'album': album})
 import csv
-
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.utils.decorators import method_decorator
 from django.views import generic
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 
 from .models import Artist, Album, ArtistImage
-from .forms import ArtistImageForm
+from .forms import ArtistImageForm, PassphraseForm
 
 
 def download_artists(request, queryset):
@@ -147,16 +144,87 @@ class UserFormView(generic.View):
 
         return render(request, self.template_name, {'form': form})
 
-# def signup(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             raw_password = form.cleaned_data.get('password1')
-#             user = authenticate(username=username, password=raw_password)
-#             login(request, user)
-#             return redirect('index')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'registration_form.html', {'form': form})
+
+def passphrase_basic(list_of_string):
+    list_of_string = list_of_string[-1].splitlines()
+    list_of_string = [each_string.lower() for each_string in list_of_string]
+    count_strings = 0
+    count_duplicate = 0
+    count_anagram = 0
+
+    for string in list_of_string:
+        count_strings = count_strings + 1
+        words = string.split(" ")
+        duplicate = False
+        anagram = False
+
+        for i in range(0, len(words)):
+            for j in range(i + 1, len(words)):
+                if words[i] == words[j]:
+                    duplicate = True
+                if len(words[i]) == len(words[j]) and sorted(words[i]) == sorted(words[j]):
+                    anagram = True
+
+        if duplicate:
+            count_duplicate = count_duplicate + 1
+        if anagram:
+            count_anagram = count_anagram + 1
+
+    return {
+        'no_duplicate': count_strings - count_duplicate,
+        'no_anagram': count_strings - count_anagram
+    }
+
+
+class PassphraseBasicFormView(generic.View):
+    form_class = PassphraseForm
+    template_name = 'passphrase_basic.html'
+    passphrases = []
+
+    # Show blank form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    # Submit user registration
+    def post(self, request):
+        form = self.form_class(request.POST)
+        count = 0
+        if form.is_valid():
+            self.passphrases = []
+            self.passphrases.append(form.cleaned_data['passphrase'])
+            count = passphrase_basic(self.passphrases)
+
+        context = {
+            'form': form,
+            'count': count['no_duplicate'],
+        }
+
+        return render(request, self.template_name, context)
+
+
+class PassphraseAdvancedFormView(generic.View):
+    form_class = PassphraseForm
+    template_name = 'passphrase_advanced.html'
+    passphrases = []
+
+    # Show blank form
+    def get(self, request):
+        form = self.form_class(None)
+        return render(request, self.template_name, {'form': form})
+
+    # Submit user registration
+    def post(self, request):
+        form = self.form_class(request.POST)
+        count = 0
+        if form.is_valid():
+            self.passphrases = []
+            self.passphrases.append(form.cleaned_data['passphrase'])
+            count = passphrase_basic(self.passphrases)
+
+        context = {
+            'form': form,
+            'count': count['no_anagram'],
+        }
+
+        return render(request, self.template_name, context)

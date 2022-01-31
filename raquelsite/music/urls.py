@@ -12,4 +12,6 @@ urlpatterns = [
     path('download-artists/', views.export_artists, name='download-artists'),
     path('upload/', views.upload_images, name='upload'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('passphrase/basic', views.PassphraseBasicFormView.as_view(), name='passphrase-basic'),
+    path('passphrase/advanced', views.PassphraseAdvancedFormView.as_view(), name='passphrase-advanced'),
 ]

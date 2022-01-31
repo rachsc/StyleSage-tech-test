@@ -4,17 +4,13 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import ArtistImage
 
 
-# class UserForm(UserCreationForm):
-#     # password = forms.CharField(widget=forms.PasswordInput)
-#
-#     class Meta:
-#         model = User
-#         fields = ['username', 'password1']
-
-
 class ArtistImageForm(forms.ModelForm):
     class Meta:
         model = ArtistImage
         fields = ['image', 'name']
+
+
+class PassphraseForm(forms.Form):
+    passphrase = forms.CharField(max_length=500, widget=forms.Textarea(attrs={'rows': 10, 'cols': 80}))
 
 
